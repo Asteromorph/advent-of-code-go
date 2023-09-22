@@ -7,10 +7,6 @@ import (
 )
 
 func main() {
-    value, err := p1.GetMaxCalories();    
-    if err != nil {
-        fmt.Printf("Error %s", err)
-        return;
-    } 
+    value := p1.GetMaxCalories2();    
     fmt.Printf("value: %v", value)
 }
