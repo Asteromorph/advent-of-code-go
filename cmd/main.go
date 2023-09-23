@@ -1,9 +1,7 @@
 package main
 
-import (
-	"github.com/Asteromorph/advent-of-code/pkg/p3"
-)
+import "github.com/Asteromorph/advent-of-code/pkg/p4"
 
 func main() {
-    p3.GetBadge();    
+    p4.GetOverlapAtAll()
 }
