@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/p2"
+	"github.com/Asteromorph/advent-of-code/pkg/p3"
 )
 
 func main() {
-    p2.GetTotalPoints2();    
+    p3.GetBadge();    
 }
