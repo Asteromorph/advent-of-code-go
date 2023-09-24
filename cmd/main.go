@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/p5"
+	"github.com/Asteromorph/advent-of-code/pkg/p6"
 )
 
 func main() {
-    p5.StackingCrates2()
+    p6.GetStartBufferSignal()
 }
