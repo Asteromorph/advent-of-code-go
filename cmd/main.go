@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/p6"
+	"github.com/Asteromorph/advent-of-code/pkg/p7"
 )
 
 func main() {
-    p6.GetStartBufferSignal()
+    p7.GetDeleteDir()
 }
