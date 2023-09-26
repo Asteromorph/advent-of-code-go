@@ -15,6 +15,7 @@ func GetDeleteDir() {
     var curObj *Object
 
 	sc := bufio.NewScanner(input)
+    //flatfile 
     fileSystem := []*Object{}
 
     for sc.Scan() {
@@ -25,6 +26,7 @@ func GetDeleteDir() {
                 curObj = curObj.Parent
             } else if line[2] == "/" {
                 curObj = &Object{0, "/", map[string]*Object{}, nil, false}
+                fileSystem = append(fileSystem, curObj)
             } else {
                 curObj = curObj.Children[line[2]]
             }
