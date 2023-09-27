@@ -36,6 +36,7 @@ func HighestScenicScore() {
 			}
 		}
 	}
+	fmt.Println(bestView)
 }
 
 func highestScore(x, y int, forest [][]int) (score int) {

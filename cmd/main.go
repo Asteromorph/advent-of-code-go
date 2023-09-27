@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/p8"
+	"github.com/Asteromorph/advent-of-code/pkg/p9"
 )
 
 func main() {
-    p8.HighestScenicScore()
+    p9.TraceTailWith10Knots()
 }
