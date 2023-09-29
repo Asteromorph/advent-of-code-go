@@ -1,7 +1,9 @@
 package main
 
-import "github.com/Asteromorph/advent-of-code/pkg/p10"
+import (
+	"github.com/Asteromorph/advent-of-code/pkg/p11"
+)
 
 func main() {
-    p10.DrawCRT()
+    p11.MonkeySlinger()
 }
