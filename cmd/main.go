@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/p11"
+	"github.com/Asteromorph/advent-of-code/pkg/p12"
 )
 
 func main() {
-    p11.MonkeySlinger()
+    p12.ShortestPath()
 }

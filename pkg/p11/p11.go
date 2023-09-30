@@ -23,6 +23,7 @@ func MonkeySlinger() {
 	defer input.Close()
 
 	sc := bufio.NewScanner(input)
+
     monkeys := []Monkey{}
 
     //parse input
