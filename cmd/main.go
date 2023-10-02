@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-    p12.ShortestPath()
+    p12.ShortestPathFromA()
 }
