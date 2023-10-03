@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/p12"
+	"github.com/Asteromorph/advent-of-code/pkg/p13"
 )
 
 func main() {
-    p12.ShortestPathFromA()
+    p13.GetDistressSignal()
 }
