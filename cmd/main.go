@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-    p13.GetDistressSignal()
+    p13.GetDecoderKey()
 }
