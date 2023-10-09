@@ -1,9 +1,7 @@
 package main
 
-import (
-	"github.com/Asteromorph/advent-of-code/pkg/p13"
-)
+import "github.com/Asteromorph/advent-of-code/pkg/p14"
 
 func main() {
-    p13.GetDecoderKey()
+    p14.SandUntilSafe()
 }
