@@ -59,37 +59,38 @@ func SandUntilSafe() {
 		}
 	}
 
-
-	falling := true
 	bottom := deep + 2
 	sandCount := 0
-	for falling {
+	for {
 		newSand := rock{x: 500, y: 0}
 		if cave[newSand] == 'o' {
-			falling = false
 			break
 		}
 		for {
 			cave[newSand] = '"'
-			
 			if newSand.y + 1 == bottom {
+				cave[newSand] = 'o'
+				sandCount++
 				break
 			}
 			if cave[rock{newSand.x, newSand.y + 1}] < '#' {
+				fmt.Println(1)
 				newSand.y++
 			} else if cave[rock{newSand.x - 1, newSand.y + 1}] < '#' {
+				fmt.Println(2)
 				newSand.x--
 				newSand.y++
 			} else if cave[rock{newSand.x + 1, newSand.y + 1}] < '#' {
+				fmt.Println(3)
 				newSand.x++
 				newSand.y++
 			} else {
+				fmt.Println(5)
 				cave[newSand] = 'o'
 				sandCount++
 				break
 			}
 		}
-		fmt.Println(sandCount)
 	}
 	// for y := 0; y <= deep; y++ {
 	//     for x := 494; x <= right; x++ {
