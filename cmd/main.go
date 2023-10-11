@@ -1,7 +1,7 @@
 package main
 
-import "github.com/Asteromorph/advent-of-code/pkg/p14"
+import "github.com/Asteromorph/advent-of-code/pkg/p15"
 
 func main() {
-    p14.SandUntilSafe()
+    p15.TuningFrequency()
 }
