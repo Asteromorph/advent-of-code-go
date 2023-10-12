@@ -35,9 +35,5 @@ func ImpossibleBeaconPositions() {
 	    delete(line10, spot{beaconX, beaconY})
 	}
     }
-	// fmt.Println(line10)
 	fmt.Println(len(line10))
-	// fmt.Println(toX)
-	// fmt.Println(toY)
-	// fmt.Println(toLine10)
 }
