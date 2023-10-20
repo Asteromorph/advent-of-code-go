@@ -1,7 +1,9 @@
 package main
 
-import "github.com/Asteromorph/advent-of-code/pkg/p15"
+import (
+	"github.com/Asteromorph/advent-of-code/pkg/p16"
+)
 
 func main() {
-    p15.TuningFrequency()
+    p16.MostPressurePath()
 }
