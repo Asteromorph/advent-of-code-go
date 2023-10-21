@@ -48,6 +48,7 @@ func bfs(graph map[string]valve, visited map[string]bool, memo map[string]int, c
 	stayNewPressure := currentPressure + bfs(graph, visited, memo, currentValve, timeLeft - 1, currentPressure)
 
 	bestFlow = int(math.Max(float64(newPressure), float64(stayNewPressure)))
+	// fmt.Println(currentValve, timeLeft, currentPressure, bestFlow, newPressure, stayNewPressure)
 	//backtrack
 	visited[currentValve] = false
     }
@@ -56,6 +57,7 @@ func bfs(graph map[string]valve, visited map[string]bool, memo map[string]int, c
 	newPressure := currentPressure + bfs(graph, visited, memo, lead, timeLeft - 1, currentPressure)
 	bestFlow = int(math.Max(float64(newPressure), float64(bestFlow)))
     } 
+    // fmt.Println(bestFlow)
     memo[key] = bestFlow
 
     return bestFlow
@@ -90,6 +92,7 @@ func makeGraph() map[string]valve {
 	v.leadTo = connections;
 	graph[v.name] = v
     }
+    fmt.Println(graph)
 
     return graph
 }
