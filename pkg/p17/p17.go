@@ -2,6 +2,7 @@ package p17
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 )
 
@@ -16,18 +17,20 @@ const (
     falling string = "falling"
 )
 
-func fallingRocks() {
+func FallingRocks() {
     input, _ := os.Open("./pkg/p17/input.txt")
     defer input.Close()
     sc := bufio.NewScanner(input)
+    sc.Scan()
 
     jetPattern := sc.Text()
+    fmt.Println(jetPattern)
 
-    rock1 := []Coor{Coor{0,0}, Coor{1,0}, Coor{2,0}, Coor{3,0}}
-    rock2 := []Coor{Coor{0,0}, Coor{1,0}, Coor{2,0}, Coor{1,1}, Coor{1,-1}}
-    rock3 := []Coor{Coor{0,0}, Coor{1,0}, Coor{2,0}, Coor{2,1}, Coor{2,2}}
-    rock4 := []Coor{Coor{0,0}, Coor{0,1}, Coor{0,2}, Coor{0,3}}
-    rock5 := []Coor{Coor{0,0}, Coor{0,1}, Coor{1,0}, Coor{1,1}}
+    rock1 := []Coor{{0,0}, {1,0}, {2,0}, {3,0}}
+    rock2 := []Coor{{0,0}, {1,0}, {2,0}, {1,1}, {1,-1}}
+    rock3 := []Coor{{0,0}, {1,0}, {2,0}, {2,1}, {2,2}}
+    rock4 := []Coor{{0,0}, {0,1}, {0,2}, {0,3}}
+    rock5 := []Coor{{0,0}, {0,1}, {1,0}, {1,1}}
     rocks := [][]Coor{}
     rocks = append(rocks, rock1)
     rocks = append(rocks, rock2)
@@ -40,35 +43,70 @@ func fallingRocks() {
     tower := make(map[Coor]bool)
     isCurrentRockFalling := true
     count := 0
+    //1 step
     isFalling := false
 
-    for i := 0; i < 2022; i++ {
+    for i := 0; i < 1; i++ {
 	// if its + then move the rock down 1
-	spawnY := height + 4;
-	newRock := Coor{spawnX, spawnY}
-	for isCurrentRockFalling {
-	    rockType := count % len(rocks) 
-	    if rockType == 1 {
-		spawnY-- 
-		newRock = Coor{spawnX, spawnY}
-	    }
-	    fallingType := checkRock(newRock, rocks[rockType], tower, isFalling)
-	    if fallingType == sideHit {
-		
-	    }
+	spawnY := height + 3;
+	curRock := Coor{spawnX, spawnY}
+	fmt.Println("begin: ", curRock)
+	nextPosOfRock := curRock
+	rockType := count % len(rocks) 
+
+	if rockType == 1 {
+	    spawnY-- 
+	    curRock = Coor{spawnX, spawnY}
 	}
+
+	fmt.Println(rockType)
+	for isCurrentRockFalling {
+	    fmt.Println("--------")
+	    //go sideways
+	    switch string(jetPattern[count % len(jetPattern)]) {
+	    case "<":
+		nextPosOfRock.x--
+	    case ">":
+		nextPosOfRock.x++
+	    }
+	    fmt.Printf("cur: %v, next: %v\n", curRock, nextPosOfRock)
+	    if checkRock(nextPosOfRock, rocks[rockType], tower, !isFalling) != sideHit {
+		curRock = nextPosOfRock
+	    }
+	    fmt.Println(curRock)
+
+	    //falling down
+	    nextPosOfRock.x = curRock.x
+	    nextPosOfRock.y = curRock.y-1
+	    if checkRock(nextPosOfRock, rocks[rockType], tower, isFalling) == downHit {
+		height = stackRock(tower, nextPosOfRock, rocks[rockType], height)
+		break
+	    }
+	    curRock = nextPosOfRock
+	    fmt.Println(curRock)
+	    count++
+	}
+	fmt.Println(count)
+	fmt.Println(tower)
     }
+    fmt.Println(height)
 }
 
 //true then tower stack
 func checkRock(start Coor, rock []Coor, tower map[Coor]bool, isFalling bool) string{
+    fmt.Println("check rock")
     for _, r := range rock {
 	newX := start.x + r.x
 	newY := start.y + r.y
-	if isFalling && tower[Coor{newX, newY}] {
+	_, ok := tower[Coor{newX, newY}]
+	if (!isFalling && ok) || newY == 0 {
+	    fmt.Println("down")
 	    return downHit
 	}
-	if !isFalling && (newX < 0 || newY > 6 || tower[Coor{newX, newY}]) {
+	fmt.Printf("newX: %d, newY: %d", newX, newY)
+	// fmt.Println(!isFalling && (newX < 0 || newX > 6 || ok) )
+	if isFalling && (newX < 0 || newX > 6 || ok) {
+	    fmt.Println("side")
 	    return sideHit
 	}
     }
@@ -76,6 +114,7 @@ func checkRock(start Coor, rock []Coor, tower map[Coor]bool, isFalling bool) str
 }
 
 func stackRock(tower map[Coor]bool, start Coor, rock []Coor, newHeight int) int{
+    fmt.Println("stack rock")
     for _, r := range rock {
 	newX := start.x + r.x
 	newY := start.y + r.y

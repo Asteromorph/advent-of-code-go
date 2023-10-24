@@ -1,9 +1,7 @@
 package main
 
-import (
-	"github.com/Asteromorph/advent-of-code/pkg/p16"
-)
+import "github.com/Asteromorph/advent-of-code/pkg/p17"
 
 func main() {
-    p16.MostPressurePath()
+    p17.FallingRocks()
 }
