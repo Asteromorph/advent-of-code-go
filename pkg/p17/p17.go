@@ -38,7 +38,7 @@ func FallingRocks() {
     rocks = append(rocks, rock4)
     rocks = append(rocks, rock5)
 
-    height := 0
+    height := -1
     spawnX := 2
     tower := make(map[Coor]bool)
     isCurrentRockFalling := true
@@ -46,18 +46,18 @@ func FallingRocks() {
     //1 step
     isFalling := false
 
-    for i := 0; i < 1; i++ {
+    for i := 0; i < 2022; i++ {
 	// if its + then move the rock down 1
-	spawnY := height + 3;
+	spawnY := height + 4;
 	curRock := Coor{spawnX, spawnY}
-	fmt.Println("begin: ", curRock)
-	nextPosOfRock := curRock
-	rockType := count % len(rocks) 
+	rockType := i % len(rocks)
 
 	if rockType == 1 {
-	    spawnY-- 
+	    spawnY++ 
 	    curRock = Coor{spawnX, spawnY}
 	}
+	nextPosOfRock := curRock
+	fmt.Println("begin: ", curRock, " type: ", rockType)
 
 	fmt.Println(rockType)
 	for isCurrentRockFalling {
@@ -69,7 +69,8 @@ func FallingRocks() {
 	    case ">":
 		nextPosOfRock.x++
 	    }
-	    fmt.Printf("cur: %v, next: %v\n", curRock, nextPosOfRock)
+	    fmt.Printf("cur: %v, next: %v, movement: %v, count: %v\n", curRock, nextPosOfRock, string(jetPattern[count % len(jetPattern)]), count)
+	    count++
 	    if checkRock(nextPosOfRock, rocks[rockType], tower, !isFalling) != sideHit {
 		curRock = nextPosOfRock
 	    }
@@ -79,34 +80,34 @@ func FallingRocks() {
 	    nextPosOfRock.x = curRock.x
 	    nextPosOfRock.y = curRock.y-1
 	    if checkRock(nextPosOfRock, rocks[rockType], tower, isFalling) == downHit {
-		height = stackRock(tower, nextPosOfRock, rocks[rockType], height)
+		height = stackRock(tower, curRock, rocks[rockType], height)
 		break
 	    }
+	    fmt.Printf("cur: %v, next: %v\n", curRock, nextPosOfRock)
 	    curRock = nextPosOfRock
 	    fmt.Println(curRock)
-	    count++
 	}
 	fmt.Println(count)
 	fmt.Println(tower)
     }
-    fmt.Println(height)
+    fmt.Printf("Height: %d\n", height)
 }
 
 //true then tower stack
 func checkRock(start Coor, rock []Coor, tower map[Coor]bool, isFalling bool) string{
-    fmt.Println("check rock")
+    // fmt.Println("check rock")
     for _, r := range rock {
 	newX := start.x + r.x
 	newY := start.y + r.y
 	_, ok := tower[Coor{newX, newY}]
-	if (!isFalling && ok) || newY == 0 {
-	    fmt.Println("down")
+	if (!isFalling && ok) || newY == -1 {
+	    // fmt.Println("down")
 	    return downHit
 	}
-	fmt.Printf("newX: %d, newY: %d", newX, newY)
+	// fmt.Printf("newX: %d, newY: %d", newX, newY)
 	// fmt.Println(!isFalling && (newX < 0 || newX > 6 || ok) )
 	if isFalling && (newX < 0 || newX > 6 || ok) {
-	    fmt.Println("side")
+	    // fmt.Println("side")
 	    return sideHit
 	}
     }
@@ -115,6 +116,7 @@ func checkRock(start Coor, rock []Coor, tower map[Coor]bool, isFalling bool) str
 
 func stackRock(tower map[Coor]bool, start Coor, rock []Coor, newHeight int) int{
     fmt.Println("stack rock")
+
     for _, r := range rock {
 	newX := start.x + r.x
 	newY := start.y + r.y
