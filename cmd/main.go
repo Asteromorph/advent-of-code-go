@@ -1,7 +1,9 @@
 package main
 
-import "github.com/Asteromorph/advent-of-code/pkg/p17"
+import (
+	"github.com/Asteromorph/advent-of-code/pkg/p18"
+)
 
 func main() {
-    p17.FallingRocks()
+    p18.SurfaceArea()
 }
