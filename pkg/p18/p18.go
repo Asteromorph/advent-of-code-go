@@ -26,12 +26,11 @@ func SurfaceArea() {
         matrix[Coor{x,y,z}] = true
     }
     // fmt.Println(matrix)
-    // sides := 0
-    // for k:= range matrix {
-    //     surfaceCalculation(matrix, k, &sides)
-    // }
-    // fmt.Println(sides)
-    countAirPockets(matrix)
+    sides := 0
+    for k:= range matrix {
+        surfaceCalculation(matrix, k, &sides)
+    }
+    fmt.Println(sides - 6*countAirPockets(matrix))
 }
 
 func surfaceCalculation(matrix map[Coor]bool, newCube Coor, sides *int) {
@@ -69,32 +68,27 @@ func surfaceCalculation(matrix map[Coor]bool, newCube Coor, sides *int) {
     *sides = *sides + 6 - joinCount
 }
 
-func countAirPockets(matrix map[Coor]bool) {
+func countAirPockets(matrix map[Coor]bool) int {
+    count := 0
     adjMatrix := map[Coor]int{}
+    adjDirections := []Coor{{1, 0, 0},{-1, 0, 0},{0, 1, 0},{0, -1, 0},{0, 0, 1},{0, 0, -1}}
+    
+    adj := Coor{}
     for k := range matrix {
-        adj := Coor{k.x + 1, k.y, k.z}
-        if _, ok := adjMatrix[adj]; ok {
-            adjMatrix[adj]++
+        for _, dir := range adjDirections {
+            adj = Coor{k.x + dir.x, k.y + dir.y, k.z + dir.z}
+            if _, ok := adjMatrix[adj]; ok {
+                adjMatrix[adj]++
+            } else {
+                adjMatrix[adj] = 1
+            }
         }
-        adj = Coor{k.x - 1, k.y, k.z}
-        if _, ok := adjMatrix[adj]; ok {
-            adjMatrix[adj]++
-        }
-        adj = Coor{k.x, k.y + 1, k.z}
-        if _, ok := adjMatrix[adj]; ok {
-            adjMatrix[adj]++
-        }
-        adj = Coor{k.x, k.y - 1, k.z}
-        if _, ok := adjMatrix[adj]; ok {
-            adjMatrix[adj]++
-        }
-        adj = Coor{k.x, k.y, k.z + 1}
-        if _, ok := adjMatrix[adj]; ok {
-            adjMatrix[adj]++
-        }
-        adj = Coor{k.x, k.y, k.z - 1}
-        if _, ok := adjMatrix[adj]; ok {
-            adjMatrix[adj]++
+    }
+
+    for k := range adjMatrix {
+        if _, ok := matrix[k]; ok {
+            // fmt.Println(k)
+            delete(adjMatrix, k)
         }
     }
     fmt.Println(adjMatrix)
@@ -102,6 +96,8 @@ func countAirPockets(matrix map[Coor]bool) {
     for k, v := range adjMatrix {
         if v == 6 {
             fmt.Println(k)
+            count++
         }
     }
+    return count
 }
