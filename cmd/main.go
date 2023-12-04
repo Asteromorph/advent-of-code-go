@@ -1,7 +1,8 @@
 package main
 
-import "github.com/Asteromorph/advent-of-code/pkg/p19"
+import "github.com/Asteromorph/advent-of-code/pkg/2023/d1"
 
 func main() {
-    p19.GetAllQualityLevel()
+    d1.Calibration2()
 }
+
