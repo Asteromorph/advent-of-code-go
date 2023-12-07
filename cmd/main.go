@@ -1,8 +1,10 @@
 package main
 
-import "github.com/Asteromorph/advent-of-code/pkg/2023/d2"
+import (
+	"github.com/Asteromorph/advent-of-code/pkg/2023/d3"
+)
 
 func main() {
-    d2.TotalOfMinimumRequirementGames()
+    d3.TotalAllLines()
 }
 

@@ -8,7 +8,7 @@ import (
 )
 
 func TotalPossibleGames() {
-    input, _ := os.Open("./pkg/2023/d2/input.txt");
+    input, _ := os.Open("./pkg/2023/d3/input.txt");
     defer input.Close()
 
     sc := bufio.NewScanner(input)
