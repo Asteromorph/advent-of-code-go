@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-    d3.TotalAllLines()
+    d3.CheckTotalGearAllLines()
 }
 
