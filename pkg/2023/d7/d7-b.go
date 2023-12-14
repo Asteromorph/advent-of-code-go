@@ -81,7 +81,7 @@ func getHandType2(curHand hand) (handType int) {
             return FourAKind
         }
         if JCount == 1 {
-            return ThreeAKind
+            return FullHouse
         }
         return TwoPair
     }
@@ -113,6 +113,7 @@ func GetTotalWinning2() {
     }
 
     cardOrders := make(map[string]int)
+    cardOrders["J"]=1
     cardOrders["2"]=2
     cardOrders["3"]=3
     cardOrders["4"]=4
@@ -122,7 +123,6 @@ func GetTotalWinning2() {
     cardOrders["8"]=8
     cardOrders["9"]=9
     cardOrders["T"]=10
-    cardOrders["J"]=11
     cardOrders["Q"]=12
     cardOrders["K"]=13
     cardOrders["A"]=14
