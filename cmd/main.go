@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/2023/d8"
+	"github.com/Asteromorph/advent-of-code/pkg/2023/d9"
 )
 
 func main() {
-    d8.StepsToNavigate()
+    d9.GetExtrapolateValue2()
 }
 

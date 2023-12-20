@@ -6,7 +6,6 @@ import (
 	"os"
 )
 
-
 func StepsToNavigate2() {
     input, _ := os.Open("./pkg/2023/d8/input.txt");
     defer input.Close()
@@ -25,7 +24,7 @@ func StepsToNavigate2() {
     
     stepsList := []int{}
     for k := range network {
-        if string(k[2]) == "Z" {
+        if string(k[2]) == "A" {
             stepsList = append(stepsList, minStepsToDest(k, steps, network))
         }
     }
@@ -36,7 +35,7 @@ func StepsToNavigate2() {
 func minStepsToDest(start string, steps []rune, network map[string]node) int {
     stepCount := 0
     curStep := start
-    for string(network[curStep].value[2]) == "Z" {
+    for string(network[curStep].value[2]) != "Z" {
         dir := steps[stepCount % len(steps)]
         if dir == 'L' {
             fmt.Println(dir)
