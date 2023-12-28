@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-    d10.FindFurthestPosInLoop()
+    d10.GetTotalTilesInLoop()
 }
 

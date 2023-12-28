@@ -51,20 +51,7 @@ func FindFurthestPosInLoop() {
     fmt.Println(matrix)
     startRow, startCol := findStartingPos(matrix)
 
-    pipeMap := map[Pipe]Coor{}
-    pipeMap[Pipe{'|', 'u'}] = Coor{-1, 0, 'u'}
-    pipeMap[Pipe{'|', 'd'}] = Coor{1, 0, 'd'}
-    pipeMap[Pipe{'-', 'l'}] = Coor{0, -1, 'l'}
-    pipeMap[Pipe{'-', 'r'}] = Coor{0, 1, 'r'}
-    pipeMap[Pipe{'L', 'l'}] = Coor{-1, 0, 'u'}
-    pipeMap[Pipe{'L', 'd'}] = Coor{0, 1, 'r'}
-    pipeMap[Pipe{'7', 'r'}] = Coor{1, 0, 'd'}
-    pipeMap[Pipe{'7', 'u'}] = Coor{0, -1, 'l'}
-    pipeMap[Pipe{'F', 'u'}] = Coor{0, 1, 'r'}
-    pipeMap[Pipe{'F', 'l'}] = Coor{1, 0, 'd'}
-    pipeMap[Pipe{'J', 'd'}] = Coor{0, -1, 'l'}
-    pipeMap[Pipe{'J', 'r'}] = Coor{-1, 0, 'u'}
-
+    pipeMap := getPipeMap()
     curRow := startRow
     curCol := startCol + 1
     stepCount := 0
@@ -81,4 +68,19 @@ func FindFurthestPosInLoop() {
     fmt.Println(math.Ceil(float64(stepCount)/2))
 }
 
-
+func getPipeMap() map[Pipe]Coor {
+    pipeMap := map[Pipe]Coor{}
+    pipeMap[Pipe{'|', 'u'}] = Coor{-1, 0, 'u'}
+    pipeMap[Pipe{'|', 'd'}] = Coor{1, 0, 'd'}
+    pipeMap[Pipe{'-', 'l'}] = Coor{0, -1, 'l'}
+    pipeMap[Pipe{'-', 'r'}] = Coor{0, 1, 'r'}
+    pipeMap[Pipe{'L', 'l'}] = Coor{-1, 0, 'u'}
+    pipeMap[Pipe{'L', 'd'}] = Coor{0, 1, 'r'}
+    pipeMap[Pipe{'7', 'r'}] = Coor{1, 0, 'd'}
+    pipeMap[Pipe{'7', 'u'}] = Coor{0, -1, 'l'}
+    pipeMap[Pipe{'F', 'u'}] = Coor{0, 1, 'r'}
+    pipeMap[Pipe{'F', 'l'}] = Coor{1, 0, 'd'}
+    pipeMap[Pipe{'J', 'd'}] = Coor{0, -1, 'l'}
+    pipeMap[Pipe{'J', 'r'}] = Coor{-1, 0, 'u'}
+    return pipeMap
+}
