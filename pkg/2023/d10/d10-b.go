@@ -7,13 +7,14 @@ func GetTotalTilesInLoop() {
     startRow, startCol := findStartingPos(matrix)
     maxRow := len(matrix)
     maxCol := len(matrix[0])
+    fmt.Println(startRow, startCol)
 
     pipeMap := getPipeMap()
     curRow := startRow
     curCol := startCol + 1
 
     loopMap := map[Coor]Pipe{}
-    loopMap[Coor{startRow, startCol, '.'}] = Pipe{'F', '.'}
+    loopMap[Coor{startRow, startCol, '.'}] = Pipe{'-', '.'}
     curPipe := Pipe{matrix[curRow][curCol], 'r'}
     var mappedCoor Coor
     // fmt.Println(curRow, curCol, matrix[curRow][curCol] != 'S')
@@ -25,7 +26,7 @@ func GetTotalTilesInLoop() {
         curPipe.shape = matrix[curRow][curCol]
         curPipe.curDir = mappedCoor.nextDir
     }
-    // fmt.Println(maxRow, maxCol)
+    fmt.Println(maxRow, maxCol)
 
     count := 0
     for r := 0; r < maxRow; r++ {
@@ -51,7 +52,7 @@ func getCuts(curCoor Coor, loopMap map[Coor]Pipe, maxRow, maxCol int) bool{
     left := checkLeft(curCoor, loopMap)
     right := checkRight(curCoor, loopMap, maxCol)
 
-    fmt.Println(curCoor, up, down, left, right)
+    // fmt.Printf("[(%d %d) %t %t %t %t]", curCoor.row, curCoor.col, up, down, left, right)
     if (up && down && left && right) {
         return true
     }
@@ -79,17 +80,17 @@ func checkUp(curCoor Coor, loopMap map[Coor]Pipe) bool {
 
 func checkDown(curCoor Coor, loopMap map[Coor]Pipe, maxRow int) bool {
     count := 0
-    // copyCoor := curCoor
+    copyCoor := curCoor
     for curCoor.row < maxRow {
-        if loopMap[curCoor].shape == '-' {
+        if isHorizontalCut(loopMap[curCoor].shape) {
             count++
         }
         curCoor.row++
     }
     // fmt.Println(count)
-    // if (copyCoor.row == 3 && copyCoor.col == 14) {
-    //     fmt.Printf("[down %d %d %d]", copyCoor.row, copyCoor.col, count)
-    // }
+    if (copyCoor.row == 3 && copyCoor.col == 14) {
+        fmt.Printf("[down %d %d %d]", copyCoor.row, copyCoor.col, count)
+    }
 
     if count % 2 == 1 {
         return true
