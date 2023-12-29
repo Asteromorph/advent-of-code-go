@@ -1,10 +1,8 @@
 package main
 
-import (
-	"github.com/Asteromorph/advent-of-code/pkg/2023/d10"
-)
+import "github.com/Asteromorph/advent-of-code/pkg/2023/d11"
 
 func main() {
-    d10.GetTotalTilesInLoop()
+    d11.ShortestPathBetweenGalaxies()
 }
 
