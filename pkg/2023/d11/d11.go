@@ -38,7 +38,7 @@ func getEmptyRows(galaxiesMap []Coor, maxRow int) (map[int]bool) {
     }
 
     for _, v := range galaxiesMap {
-        if emptyRows[v.row] {
+   if emptyRows[v.row] {
             delete(emptyRows, v.row)
         }
     }
@@ -64,19 +64,15 @@ func ShortestPathBetweenGalaxies() {
     emptyRows := getEmptyRows(galaxiesCoors, maxRow)
     emptyCols := getEmptyCols(galaxiesCoors, maxCol)
     fmt.Println(galaxiesCoors, emptyRows, emptyCols)
-    fmt.Println(getDistanceForMap(galaxiesCoors, emptyRows, emptyCols))
 }
 
-func getDistanceForMap(galaxiesMap []Coor, emptyRows, emptyCols map[int]bool) int {
-    total := 0
+func getDistanceForMap(galaxiesMap []Coor, emptyRows, emptyCols []int) int {
     for i := 0; i < len(galaxiesMap) - 1; i++ {
         for j := i + 1; j < len(galaxiesMap); j++ {
-            total += getDistanceForOnePair(galaxiesMap[i],galaxiesMap[j],emptyRows, emptyCols)
+
         }
     }
-    return total
 }
-
 
 func getDistanceForOnePair(g1, g2 Coor, emptyRows, emptyCols map[int]bool) int {
     distance := abs(g2.col - g1.col) + abs(g2.row - g1.row)
@@ -99,12 +95,12 @@ func getDistanceForOnePair(g1, g2 Coor, emptyRows, emptyCols map[int]bool) int {
 
     for i := left + 1; i < right; i++ {
         if emptyCols[i] {
-            distance += 999999
+            distance++
         }
     }
     for i := top + 1; i < bottom; i++ {
         if emptyRows[i] {
-            distance += 999999
+            distance++
         }
     }
     return distance

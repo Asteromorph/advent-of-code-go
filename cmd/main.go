@@ -1,8 +1,10 @@
 package main
 
-import "github.com/Asteromorph/advent-of-code/pkg/2023/d11"
+import (
+	"github.com/Asteromorph/advent-of-code/pkg/2023/d12"
+)
 
 func main() {
-    d11.ShortestPathBetweenGalaxies()
+    d12.Part1()
 }
 
