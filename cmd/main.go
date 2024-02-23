@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-    d12.Part1()
+    d12.TotalArrangements()
 }
 

@@ -2,107 +2,104 @@ package d12
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
 )
 
-type Record struct {
-    sequenece string
-    groups string
-}
+func memoize(memoizeFunc func(string, []int) int) func(string, []int) int {
+    store := make(map[string]int)
 
-func stringToIntSlice(groups string) []int {
-    result := []int{}
-    if len(groups) > 0 {
-	groupStrings := strings.Split(groups, ",")
-	for _, v := range(groupStrings) {
-	    val, _ := strconv.Atoi(v)
-	    result = append(result, val)
+    return func(line string, runs []int) int {
+	k, _ := json.Marshal([]interface{}{line, runs})
+	key := string(k)
+
+	if v, ok := store[key]; ok {
+	    return v
 	}
+
+	result := memoizeFunc(line, runs)
+	store[key] = result
+	return result
     }
-    return result
 }
 
-func sum(groups []int) int {
+func sum(runs []int) int {
     res := 0
-    for _, v := range(groups) {
-	res += v
+    if len(runs) > 0 {
+	for _, v := range runs {
+	    res += v
+	}
     }
     return res
 }
 
-func parseLine(input string) Record {
-    tokens := strings.Split(input, " ")
-
-    return Record{
-	sequenece: tokens[0],
-	groups: tokens[1],
-    }
-}
-
-func sliceFirstNum(groups string) string {
-    if len(groups) < 2 {
-	return groups[1:]
-    } 
-    return groups[2:]
-}
-
-func dfsWithCache(cache map[Record]int, seq, groups string) int {
-    fmt.Println(seq, groups, cache)
-    if len(groups) <= 0 {
-	return 0
-    }
-    if cacheValue, ok := cache[Record{seq, groups}]; ok {
-	return cacheValue
-    }
-    seqLen := len(seq)
-    groupSlice := stringToIntSlice(groups)
-    first := groupSlice[0]
-    if seqLen - sum(groupSlice) - len(groupSlice) + 1 < 0 {
-	return 0
-    }
-    hasHole := strings.IndexRune(seq, '.')
-    if seqLen == first {
-	if hasHole > -1 {
+func countArrangements(line string, runs []int) int {
+    if len(line) == 0 {
+	if len(runs) == 0 {
 	    return 1
-	} else {
-	    return 0
 	}
+	return 0
     }
-    canUse := hasHole <= -1 && seq[first] != '#'
-    if seq[0] == '#' {
-        nextSeq := strings.TrimLeft(seq[first + 1:], ".")
-	if canUse {
-	    return dfsWithCache(cache, nextSeq, sliceFirstNum(groups))
-	} else {
-	    return 0
+
+    if len(runs) == 0 {
+	for _, v := range line {
+	    if v == '#' {
+		return 0
+	    }
 	}
+	return 1
     }
-    skip := dfsWithCache(cache, strings.TrimLeft(seq[1:], "."), groups)
-    newCacheKey := Record{seq, groups}
-    if !canUse {
-	cache[newCacheKey] = skip
-	return skip
+
+    if len(line) < sum(runs) + len(runs) - 1 {
+	return 0
     }
-    res := skip + dfsWithCache(cache, strings.TrimLeft(seq[first + 1:], "."), sliceFirstNum(groups))
-    cache[newCacheKey] = res
-    return res
+
+    if line[0] == '.' {
+	return countArrangements(line[1:], runs)
+    }
+
+    if line[0] == '#' {
+	cur := runs[0]
+	for i := 0; i < cur; i++ {
+	    if line[i] == '.' {
+		return 0
+	    }
+	}
+	if line[cur] == '#' {
+	    return 0
+	} 
+
+	return countArrangements(line[cur + 1:], runs[1:])
+    }
+
+    return countArrangements("#" + line[1:], runs) + countArrangements("." + line[1:], runs)
 }
 
+func parseLine(line string) (string, []int) {
+    tokens := strings.Split(line, " ")
+    runsStr := strings.Split(tokens[1], ",")
+    runs := []int{}
+    for _, v := range runsStr {
+	num, _ := strconv.Atoi(v)
+	runs = append(runs, num)
+    }
+    return tokens[0], runs
+}
 
-func Part1() {
+func TotalArrangements() {
     input, _ := os.Open("./pkg/2023/d12/input.txt")
     defer input.Close()
     sc := bufio.NewScanner(input)
 
+    count := memoize(countArrangements)
+
     res := 0
     for sc.Scan() {
-	cache := make(map[Record]int)
-	record := parseLine(sc.Text())
-
-	res += dfsWithCache(cache, record.sequenece, record.groups)
+	line, runs := parseLine(sc.Text())
+	res += count(line + ".", runs)
     }
     fmt.Println(res)
 }
