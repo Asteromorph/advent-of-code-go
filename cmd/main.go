@@ -1,10 +1,8 @@
 package main
 
-import (
-	"github.com/Asteromorph/advent-of-code/pkg/2023/d12"
-)
+import "github.com/Asteromorph/advent-of-code/pkg/2023/d13"
 
 func main() {
-    d12.TotalArrangements()
+    d13.Part1()
 }
 

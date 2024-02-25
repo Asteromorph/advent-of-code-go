@@ -103,3 +103,25 @@ func TotalArrangements() {
     }
     fmt.Println(res)
 }
+
+func TotalArrangnements2() {
+    input, _ := os.Open("./pkg/2023/d12/input.txt")
+    defer input.Close()
+    sc := bufio.NewScanner(input)
+
+    count := memoize(countArrangements)
+
+    res := 0
+    for sc.Scan() {
+	line, runs := parseLine(sc.Text())
+	fiveRuns := []int{}
+	var fiveLines string
+	for i := 0; i < 5; i++ {
+	    fiveLines += line + "?"
+	    fiveRuns = append(fiveRuns, runs...)
+	}
+	fiveLines = fiveLines[:len(fiveLines) - 1]
+	res += count(fiveLines + ".", fiveRuns)
+    }
+    fmt.Println(res)
+}
