@@ -7,7 +7,6 @@ import (
 )
 
 func isReflection(line1, line2 string) bool {
-    fmt.Println("line", line1, line2)
     for i := 0; i < len(line1); i++ {
         if line1[i] != line2[i] {
             return false
@@ -17,7 +16,6 @@ func isReflection(line1, line2 string) bool {
 }
 
 func flipToVertical(horizontalPattern []string) []string {
-    fmt.Println(horizontalPattern)
     vertialPattern := []string{}
     if len(horizontalPattern) > 0 {
         for i := 0; i < len(horizontalPattern[0]); i++ {
@@ -32,19 +30,33 @@ func flipToVertical(horizontalPattern []string) []string {
     return vertialPattern
 }
 
-func check(pattern []string) int {
-    for i := 0; i < len(pattern) - 2; i++ {
-        if (isReflection(pattern[i], pattern[i + 1])) {
-            k := 1
-            for i - k >= 0 && i + 1 + k < len(pattern) && isReflection(pattern[i - k], pattern[i + 1 + k]) {
-                k++
-            }
-
-            k--
-            if (i - k == 0 || i + 1 + k == len(pattern) - 1) {
-                return k
-            }
+func checkToEdge(i int, pattern []string) int {
+    if (isReflection(pattern[i], pattern[i + 1])) {
+        k := 1
+        for i - k >= 0 && i + 1 + k < len(pattern) && isReflection(pattern[i - k], pattern[i + 1 + k]) {
+            k++
         }
+
+        k--
+        if (i - k == 0 || i + 1 + k == len(pattern) - 1) {
+            i++
+            return i
+        }
+    }
+    return 0
+}
+
+func check(pattern []string) int {
+    m := len(pattern) / 2
+    d := 0
+    for m - d >= 1 || m + d < len(pattern) -1 {
+        if res := checkToEdge(m + d, pattern); res != 0 {
+            return res
+        }
+        if res := checkToEdge(m - d, pattern); res != 0 {
+            return res
+        }
+        d++
     }
     return 0
 }
@@ -55,14 +67,17 @@ func Part1() {
     sc := bufio.NewScanner(input)
 
     patterns := []string{}
+    var verSum, horSum int
     for sc.Scan() {
         if len(sc.Text()) != 0 {
             patterns = append(patterns, sc.Text())
-            if hor := check(patterns); hor > 0 {
-                fmt.Println(hor)
-            } else {
-                fmt.Println(check(flipToVertical(patterns)))
-            }
+        } else {
+            horSum += check(patterns)
+            verSum += check(flipToVertical(patterns))
+            patterns = []string{}
         }
     }
+    res := horSum * 100 + verSum
+
+    fmt.Println(res, horSum, verSum)
 }
