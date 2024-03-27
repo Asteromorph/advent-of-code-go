@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/2023/d14"
+	"github.com/Asteromorph/advent-of-code/pkg/2023/d15"
 )
 
 func main() {
-    d14.Part2()
+    d15.Part2()
 }
 
