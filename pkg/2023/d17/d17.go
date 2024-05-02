@@ -20,6 +20,11 @@ type LavaRun struct {
     dir, opp rune
 }
 
+type Dist struct {
+    val, curDirCount *int
+    dir *rune
+}
+
 func Part1() {
     input, _ := os.Open("./pkg/2023/d17/input.txt")
     defer input.Close()
@@ -36,7 +41,12 @@ func Part1() {
         row++
     }
 
-    fmt.Println(minimumHeatPath(matrix, Lava{0, 0}))
+    dist := minimumHeatPath(matrix, Lava{0, 0})
+    for k, v := range dist {
+        fmt.Printf("%v: %v, %v, %v ", k, *v.val, *v.curDirCount, string(*v.dir))
+    }
+    lastLava := dist[Lava{12, 12}]
+    fmt.Println(lastLava, *lastLava.val, len(matrix) - 1, len(matrix[0]) - 1)
 }
 
 func isValid(x, y int, matrix map[int]map[int]int) bool {
@@ -72,19 +82,25 @@ func findOpp(adjs [4]LavaRun, curDir rune) LavaRun {
     return LavaRun{}
 }
 
-func minimumHeatPath(matrix map[int]map[int]int, startingPoint Lava) (map[Lava]int) {
-    dist := make(map[Lava]int)
+func minimumHeatPath(matrix map[int]map[int]int, startingPoint Lava) (map[Lava]Dist) {
+    dist := make(map[Lava]Dist)
     var queue []Lava
     for r := range matrix {
         for c := range matrix[r] {
             cur := Lava{r, c}
             if !reflect.DeepEqual(startingPoint, cur) {
-                dist[cur] = math.MaxInt
+                initialRuneVal := 'n'
+                intiialDirStepCount := 0
+                initialIntVal := math.MaxInt
+                dist[cur] = Dist{&initialIntVal, &intiialDirStepCount, &initialRuneVal}
             }
             queue = append(queue, cur)
         }
     }
-    dist[startingPoint] = 0
+    startingPointIntValue := 0
+    startingPointDirStepCount := 0
+    startingPointRuneValue := 'n'
+    dist[startingPoint] = Dist{&startingPointIntValue, &startingPointDirStepCount , &startingPointRuneValue}
     adjs := [4]LavaRun{{Lava{0, 1}, 'r', 'l'},{Lava{0, -1}, 'l', 'r'},{Lava{1, 0}, 'd', 'u'},{Lava{-1, 0}, 'u', 'd'}}
 
     var curDir rune
@@ -93,13 +109,20 @@ func minimumHeatPath(matrix map[int]map[int]int, startingPoint Lava) (map[Lava]i
     for len(queue) != 0 {
         minDist := math.MaxInt
         var curLava Lava
+        printDist(dist)
         for k, v := range dist {
-            if slices.Contains(queue, k) && v < minDist {
-                minDist = v
+            if slices.Contains(queue, k) && *v.val < minDist {
+                minDist = *v.val
+                // nextDir = *v.dir
                 curLava = k
             }
         }
+
         queue = removeFromArray(queue, curLava)
+        curDir = *dist[curLava].dir
+        countCurDir = *dist[curLava].curDirCount
+        fmt.Println("smallest adj", string(curDir), countCurDir, curLava, minDist)
+        
         // time.Sleep(1 * time.Second)
 
         // fmt.Println("queue", queue)
@@ -109,32 +132,50 @@ func minimumHeatPath(matrix map[int]map[int]int, startingPoint Lava) (map[Lava]i
             if (nextX < 0 || nextY < 0 || nextX >= len(matrix) || nextY >= len(matrix[0]) || (nextX == 0 && nextY == 0)) {
                 continue
             }
+
+            if reflect.DeepEqual(findOpp(adjs, curDir), curDir) {
+                continue
+            }
+
             if adj.dir == curDir {
-                if countCurDir >= 3 {
+                // fmt.Println("choosind dir", string(adj.dir), string(curDir), countCurDir)
+                if countCurDir >= 2 {
+                    // delete(dist, curLava)
                     continue
                 } else {
                     countCurDir++
                 }
             } else {
                 countCurDir = 0
+                curDir = adj.dir
             }
-            if reflect.DeepEqual(findOpp(adjs, curDir), curDir) {
-                continue
-            }
-            fmt.Println("cur", curLava, countCurDir, string(curDir), dist[curLava])
+
             nextLava.x = nextX
             nextLava.y = nextY
-            curDir = adj.dir
 
             // time.Sleep(1 * time.Second)
 
-            alt := dist[curLava] + matrix[nextLava.x][nextLava.y]
-            if alt < dist[nextLava] {
-                dist[nextLava] = alt
+            alt := *dist[curLava].val + matrix[nextLava.x][nextLava.y]
+            if _, ok := dist[nextLava]; ok {
+                if alt < *dist[nextLava].val {
+                    *dist[nextLava].val = alt
+                    *dist[nextLava].curDirCount = countCurDir
+                    *dist[nextLava].dir = adj.dir
+                }
             }
             // fmt.Println("nextLava minDist", nextLava, countCurDir)
         }
     }
 
     return dist
+}
+
+func printDist(dist map[Lava]Dist) {
+    for k, v := range dist {
+        if *v.val != math.MaxInt {
+            fmt.Printf("(%v %v)", k, *v.val)
+        } else {
+            fmt.Printf("(%v inf)", k)
+        }
+    }
 }
