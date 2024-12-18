@@ -1,8 +1,10 @@
 package main
 
-import "github.com/Asteromorph/advent-of-code/pkg/2023/d18"
+import (
+	"github.com/Asteromorph/advent-of-code/pkg/2024/day6"
+)
 
 func main() {
-    d18.Part1()
+    day6.GuardDistictPositions()
 }
 
