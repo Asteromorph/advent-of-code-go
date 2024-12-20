@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/Asteromorph/advent-of-code/pkg/2024/day6"
+	"github.com/Asteromorph/advent-of-code/pkg/2024/day7"
 )
 
 func main() {
-    day6.GuardDistictPositions()
+    day7.TotalCalibration2()
 }
 
