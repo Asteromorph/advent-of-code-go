@@ -8,40 +8,72 @@ import (
 )
 
 func FileSystemChecksum() {
-    diskList, spaceList := getInput()
-    fmt.Println(diskList,spaceList)
+    disks, spaces := getInput()
+    fmt.Println(disks, spaces)
 
-    curDiskLen, curSpaceLen := diskList[len(diskList) - 1], spaceList[0] 
-    sum := 0
-    spaceIdx := 0
-    idx := diskList[0]
-    spaceDif := 0
+    //idx is also value
+    sum, curDiskIdx, curSpaceIdx := 0, len(disks) - 1, 0
+    left, right := disks[0] - 1, diskSpaceLength(disks)
+    isSpace := true
+    //idx of cur disk
+    i := 0
 
-    for i := 0; i < len(diskList); i++ {
-        spaceDif = curSpaceLen - curDiskLen
-        tmpIdx := spaceIdx
-        if spaceDif > 0 {
-            for j := idx; j <= idx + curDiskLen; j++ {
-                sum += (len(diskList) - i) * j
+    curSpace, curDiskSpace := spaces[curSpaceIdx], disks[curDiskIdx]
+    totalIdx := disks[0]
+    for left != right {
+        if isSpace {
+            for ok := true; ok; ok = curSpace > curDiskSpace {
+                fmt.Printf("1: curSpaceIdx: %d, curDiskIdx: %d, curSpace: %d, curDiskSpace: %d, left: %d ,right: %d, i: %d, totalIdx: %d, sum: %d \n", curSpaceIdx, curDiskIdx, curSpace, curDiskSpace, left ,right, i, totalIdx ,sum)
+
+                sum += addValue(totalIdx, totalIdx + curDiskSpace, curDiskIdx)
+                curSpace -= curDiskSpace
+                left += curDiskSpace
+                right -= curDiskSpace
+                totalIdx += curDiskSpace
+
+                curDiskIdx--
+                curDiskSpace = disks[curDiskIdx]
             }
-            curSpaceLen -= curDiskLen
-        } else if spaceDif == 0 {
-            for j := idx; j <= idx + curDiskLen; j++ {
-                sum += (len(diskList) - i) * j
-            }
-            curSpaceLen -= curDiskLen
-            tmpIdx = spaceIdx + 1
-        }
+            if curSpace <= curDiskSpace {
+                fmt.Printf("2: curSpaceIdx: %d, curDiskIdx: %d, curSpace: %d, curDiskSpace: %d, left: %d ,right: %d, i: %d, totalIdx: %d, sum: %d \n", curSpaceIdx, curDiskIdx, curSpace, curDiskSpace, left ,right, i, totalIdx ,sum)
 
-        if tmpIdx > spaceDif {
+                sum += addValue(totalIdx, totalIdx + curSpace, curDiskIdx)
+                isSpace = false
+                left += curSpace
+                right -= curSpace
+                totalIdx += curSpace
+            }
+        } else {
+            fmt.Printf("3: curSpaceIdx: %d, curDiskIdx: %d, curSpace: %d, curDiskSpace: %d, left: %d ,right: %d, i: %d, totalIdx: %d, sum: %d \n", curSpaceIdx, curDiskIdx, curSpace, curDiskSpace, left ,right, i, totalIdx ,sum)
+
+            for j := 0; j < disks[i]; j++ {
+                sum += totalIdx * i
+                totalIdx++
+            }
             i++
-            for j := idx; j < idx + diskList[i]; j++ {
-                sum += i * j
-            }
+            left += i
+            isSpace = true
+            curSpaceIdx++
+            curSpace = spaces[curSpaceIdx]
         }
-
     }
+
     fmt.Println(sum)
+}
+
+func addValue(from, to, val int) (res int) {
+    for i := from; i < to; i++ {
+        res += i * val
+    }
+    fmt.Println("add value", from ,to, val, res)
+    return
+}
+
+func diskSpaceLength(disks []int) (sum int){
+    for _, v := range disks {
+        sum += v
+    } 
+    return 
 }
 
 func getInput() ([]int, []int){
